@@ -1,11 +1,37 @@
 ﻿// LoGUI.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
 //
 
-#include <iostream>
+#include <SFML/Graphics.hpp>
+#define w 1000
+#define h 500
 
-int main()
-{
-    std::cout << "Hello World!\n";
+
+int main() {
+	sf::Clock clock;
+
+	sf::RenderWindow window(sf::VideoMode(w, h), "Ray tracing", sf::Style::Titlebar | sf::Style::Close);
+	window.setFramerateLimit(60);
+
+	sf::RenderTexture emptyTexture;
+	emptyTexture.create(w, h);
+	sf::Sprite emptySprite = sf::Sprite(emptyTexture.getTexture());
+	sf::Shader shader;
+	shader.loadFromFile("out.frag", sf::Shader::Fragment);
+
+	while (window.isOpen())
+	{
+		sf::Event event;
+		while (window.pollEvent(event))
+		{
+			if (event.type == sf::Event::Closed)
+			{
+				window.close();
+			}
+		}
+		window.draw(emptySprite, &shader);
+		window.display();
+	}
+	return 0;
 }
 
 // Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
